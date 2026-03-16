@@ -36,28 +36,29 @@ The model is calibrated using standard quarterly parameters:
 
 | Parameter | Value | Description |
 | :--- | :--- | :--- |
-| $\beta$ | 0.99 | Discount Factor |
-| $\alpha$ | 0.33 | Capital Share |
-| $\delta$ | 0.025 | Depreciation Rate |
-| $\nu$ | 1.0 | Frisch Elasticity |
-| $\rho$ | 0.95 | Persistence of Productivity Shock |
-| $\sigma$ | 0.02 | Std. Dev. of Innovation |
-| $L_{ss}$ | 0.33 | Target Labor Supply (Steady State) |
+| β | 0.99 | Discount Factor |
+| α | 0.33 | Capital Share |
+| δ | 0.025 | Depreciation Rate |
+| ν | 1.0 | Frisch Elasticity |
+| ρ | 0.95 | Persistence of Productivity Shock |
+| σ | 0.02 | Std. Dev. of Innovation |
+| L<sub>ss</sub> | 0.33 | Target Labor Supply (Steady State) |
 
 ### Deterministic Solution Comparison
 ![Deterministic Comparison](./solve_NGM_model/NGM_figures/deterministic_Chebyshev_direct_comparison.png)
 
 ### Stochastic NGM with Endogenous Labor Supply
+###The stochastic implementation solves for consumption and labor supply policies across the (k, z) state space.
 
 #### Policy Functions & Results
-The stochastic solution provides the policy functions for $c(k,z)$ and $l(k,z)$.
+The stochastic solution provides the policy functions for c(k,z) and l(k,z).
 
 ![2D Policy Functions](./solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation_2d.png)
 
 ![Policy Functions Z1](./solve_NGM_model/NGM_figures/stochastic/stochastic_labor_policy_functions_z1.png)
 
 #### Euler Equation Errors: Convergence and Accuracy
-Measurement of numerical precision as a function of the polynomial degree ($n$). As $n$ increases, the Euler residuals vanish, demonstrating high global accuracy.
+Measurement of numerical precision as a function of the polynomial degree (n). As n increases, the Euler residuals vanish, demonstrating high global accuracy.
 
 | Degree $n=3$ | Degree $n=5$ |
 | :---: | :---: |
