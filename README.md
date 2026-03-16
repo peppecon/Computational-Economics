@@ -6,8 +6,7 @@ This repository contains implementations of numerical methods for solving dynami
 
 The project is structured to demonstrate:
 1.  **Direct Implementation of Projection Methods**: Using Chebyshev polynomials to approximate value and policy functions.
-2.  **Performance Comparison**: Evaluating the accuracy and efficiency of projection methods against standard **Log-Linearization**.
-3.  **Advanced Application**: Solving the **Stochastic NGM with Endogenous Labor Supply** using global solution methods.
+2. **Advanced Application**: Solving the **Stochastic NGM with Endogenous Labor Supply** using global solution methods.
 
 ## 1. Function Approximation & Teaching Material
 
@@ -49,10 +48,6 @@ We extend the model to include stochastic productivity shocks and an endogenous 
 The 3D policy functions capture the interaction between capital, labor supply, and uncertainty across the state space.
 
 ![NGM Policy Functions 3D](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation.png)
-
-### Performance: Projection vs. Log-Linearization
-![Comparison: Chebyshev vs Log-Linear](Projection%20Methods%20with%20NGM%20Application/chebyshev_loglinear_comparison/figures/comparison_expx.png)
-*Figure: Global Chebyshev vs. Local Log-Linearization errors.*
 
 ### Euler Equation Errors
 Low errors across the state space confirm the high accuracy of the global Chebyshev solution.
