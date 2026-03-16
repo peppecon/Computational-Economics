@@ -9,34 +9,57 @@ The project is structured to demonstrate:
 2.  **Performance Comparison**: Evaluating the accuracy and efficiency of projection methods against standard **Log-Linearization**.
 3.  **Advanced Application**: Solving the **Stochastic NGM with Endogenous Labor Supply** using global solution methods.
 
-## Key Features
+## 1. Function Approximation & Teaching Material
 
-### 1. Projection Methods Implementation
-We implement global solution methods using Chebyshev orthogonal polynomials. This approach provides high-order accuracy across the entire state space, capturing non-linearities that local approximations (like log-linearization) might miss.
+The following figures illustrate the core concepts of function approximation used in this project, highlighting why global projection methods (like Chebyshev) are superior to local methods (like Taylor expansions) for many economic applications.
 
-### 2. Performance: Projection vs. Log-Linearization
-The following figure compares the policy functions and approximation errors of the global Chebyshev method versus local log-linearization.
+### Smoothness and Approximation
+![Smooth vs Non-Smooth](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/03_smooth_vs_nonsmooth.png)
+*Comparison of approximating smooth vs. non-smooth functions.*
 
+### Global vs. Local Approximation
+Comparing Taylor expansions (local) with Chebyshev polynomials (global):
+
+| Local (Taylor) | Global (Chebyshev) |
+| :---: | :---: |
+| ![Taylor Expansion Only](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/13_taylor_expansions_only.png) | ![Chebyshev Only](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/14_chebyshev_only.png) |
+
+### Efficiency of Chebyshev Polynomials
+Chebyshev polynomials are particularly efficient at approximating complex curvatures without the oscillatory behavior seen in standard high-order polynomials (Runge's phenomenon).
+
+![Chebyshev vs Polynomial Exp](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/09a_chebyshev_vs_polynomial_exp.png)
+![Chebyshev vs Polynomial Curvy](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/09b_chebyshev_vs_polynomial_curvy.png)
+
+---
+
+## 2. Deterministic NGM: Model Comparison
+
+We compare the deterministic steady state and transition paths computed via different numerical methods.
+
+![Deterministic Comparison](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/deterministic_Chebyshev_direct_comparison.png)
+*Figure: Comparison of deterministic solutions.*
+
+---
+
+## 3. Stochastic NGM with Endogenous Labor Supply
+
+We extend the model to include stochastic productivity shocks and an endogenous labor-leisure choice. 
+
+### Policy Functions (Stochastic)
+The 3D policy functions capture the interaction between capital, labor supply, and uncertainty across the state space.
+
+![NGM Policy Functions 3D](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation.png)
+
+### Performance: Projection vs. Log-Linearization
 ![Comparison: Chebyshev vs Log-Linear](Projection%20Methods%20with%20NGM%20Application/chebyshev_loglinear_comparison/figures/comparison_expx.png)
-*Figure 1: Comparison of policy functions and errors.*
+*Figure: Global Chebyshev vs. Local Log-Linearization errors.*
 
-### 3. Stochastic NGM with Endogenous Labor Supply
-We extend the model to include stochastic productivity shocks and an endogenous labor-leisure choice. The solution captures the complex interaction between capital accumulation, labor supply, and uncertainty.
-
-#### Policy Functions
-The figures below show the policy functions for capital and labor supply under different states.
-
-![NGM Policy Functions](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation.png)
-*Figure 2: 3D Visualization of Policy Functions.*
-
-![NGM Policy Functions 2D](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation_2d.png)
-*Figure 3: 2D Slices of Policy Functions.*
-
-#### Euler Equation Errors
-To verify the accuracy of the global solution, we compute the Euler equation errors across the state space. Low errors indicate a high-fidelity solution.
+### Euler Equation Errors
+Low errors across the state space confirm the high accuracy of the global Chebyshev solution.
 
 ![Euler Errors 3D](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_euler_errors_3d.png)
-*Figure 4: Euler Equation Errors (Global).*
+
+---
 
 ## Repository Structure
 
@@ -49,4 +72,3 @@ To verify the accuracy of the global solution, we compute the Euler equation err
 ## Requirements
 - Python 3.x
 - NumPy, SciPy, Matplotlib
-- (Optional) Jupyter Notebook for interactive examples.
