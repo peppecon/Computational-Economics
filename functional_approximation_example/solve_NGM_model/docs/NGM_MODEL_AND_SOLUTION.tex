@@ -1,0 +1,483 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{verbatim}
+\geometry{margin=1in}
+
+% Color definitions
+\definecolor{primaryblue}{RGB}{41, 98, 255}
+\definecolor{secondaryblue}{RGB}{100, 181, 246}
+\definecolor{algorithmbox}{RGB}{240, 248, 255}
+\definecolor{theorembox}{RGB}{255, 248, 240}
+
+% Custom algorithm environment
+\newtcolorbox{algorithmbox}{
+    colback=algorithmbox,
+    colframe=primaryblue,
+    boxrule=2pt,
+    arc=5pt,
+    fonttitle=\bfseries\large,
+    title=Algorithm,
+    breakable,
+    enhanced,
+    attach boxed title to top left={yshift=-2mm, xshift=3mm},
+    boxed title style={colback=primaryblue, colframe=primaryblue}
+}
+
+% Pseudocode style
+\newenvironment{pseudocode}
+{\small
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.15em}
+\fontfamily{cmtt}\selectfont}
+{\normalfont}
+
+\newcommand{\pseudoline}[1]{\makebox[2.5em][r]{#1}\quad}
+\newcommand{\pseudokw}[1]{\textbf{#1}}
+\newcommand{\pseudocomment}[1]{\textnormal{\textit{#1}}}
+
+% Theorem environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+% Custom boxes
+\tcbuselibrary{theorems, breakable, skins}
+\newtcolorbox{keybox}[1]{
+    colback=algorithmbox,
+    colframe=primaryblue,
+    boxrule=1.5pt,
+    arc=3pt,
+    fonttitle=\bfseries,
+    title=#1,
+    breakable
+}
+
+\newtcolorbox{theorembox}[1]{
+    colback=theorembox,
+    colframe=orange!70!black,
+    boxrule=1.5pt,
+    arc=3pt,
+    fonttitle=\bfseries,
+    title=#1,
+    breakable
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textsc{Neoclassical Growth Model}}
+\fancyhead[R]{\textsc{Chebyshev Solution Method}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\title{\textbf{Stochastic Neoclassical Growth Model with Labor}\\
+\large Model Specification and Chebyshev Polynomial Solution Method}
+\author{Piero De Dominicis}
+\date{\vspace{-0.5cm}}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\vspace{-0.5cm}
+\begin{center}
+\rule{0.8\textwidth}{0.4pt}
+\end{center}
+\vspace{0.3cm}
+
+\section{Model Specification}
+
+\vspace{0.2cm}
+\subsection{Household Problem}
+
+The representative household maximizes expected lifetime utility:
+\begin{equation}
+\max_{\{c_t, \ell_t, k_{t+1}\}_{t=0}^{\infty}} E_0 \sum_{t=0}^{\infty} \beta^t U(c_t, \ell_t)
+\end{equation}
+
+subject to the resource constraint:
+\begin{equation}
+k_{t+1} = (1-\delta) k_t + z_t k_t^{\alpha} \ell_t^{1-\alpha} - c_t
+\end{equation}
+
+where:
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+\item $c_t$ is consumption
+\item $\ell_t$ is labor supply (bounded: $0 \leq \ell_t \leq 1$)
+\item $k_t$ is capital
+\item $z_t$ is productivity (stochastic)
+\item $\beta \in (0,1)$ is the discount factor
+\item $\delta \in (0,1)$ is the depreciation rate
+\item $\alpha \in (0,1)$ is the capital share
+\end{itemize}
+
+\subsection{Utility Function}
+
+We use log utility with labor disutility:
+\begin{equation}
+U(c, \ell) = \log(c) - \chi \frac{\ell^{1+1/\nu}}{1+1/\nu}
+\end{equation}
+
+where:
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+\item $\chi > 0$ is the labor disutility parameter
+\item $\nu > 0$ is the Frisch elasticity parameter (inverse of labor supply elasticity)
+\end{itemize}
+
+The marginal utilities are:
+\begin{align}
+U_c(c, \ell) &= \frac{1}{c} \\
+U_{\ell}(c, \ell) &= -\chi \ell^{1/\nu}
+\end{align}
+
+\subsection{Productivity Process}
+
+Productivity follows an AR(1) process in logs:
+\begin{equation}
+\log(z_{t+1}) = \rho \log(z_t) + \varepsilon_{t+1}
+\end{equation}
+
+where:
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+\item $\rho \in (0,1)$ is the persistence parameter
+\item $\varepsilon_{t+1} \sim N(0, \sigma^2)$ is an i.i.d. shock
+\end{itemize}
+
+\section{Equilibrium Conditions}
+
+\subsection{Euler Equation (Intertemporal FOC)}
+
+The Euler equation for capital accumulation is:
+\begin{equation}
+U_c(c_t, \ell_t) = \beta E_t \left[ U_c(c_{t+1}, \ell_{t+1}) R_{t+1} \right]
+\end{equation}
+
+where $R_{t+1}$ is the return on capital:
+\begin{equation}
+R_{t+1} = \alpha z_{t+1} k_{t+1}^{\alpha-1} \ell_{t+1}^{1-\alpha} + (1-\delta)
+\end{equation}
+
+With log utility ($U_c(c, \ell) = 1/c$), the Euler equation becomes:
+\begin{equation}
+\frac{1}{c_t} = \beta E_t \left[ \frac{1}{c_{t+1}} R_{t+1} \right]
+\end{equation}
+
+\subsection{Intratemporal FOC (Labor-Leisure Choice)}
+
+The intratemporal first-order condition equates the marginal rate of substitution between consumption and labor to the wage:
+\begin{equation}
+-\frac{U_{\ell}(c_t, \ell_t)}{U_c(c_t, \ell_t)} = w_t
+\end{equation}
+
+where $w_t = (1-\alpha) z_t k_t^{\alpha} \ell_t^{-\alpha}$ is the wage.
+
+Substituting the utility derivatives:
+\begin{equation}
+\frac{\chi \ell_t^{1/\nu}}{1/c_t} = (1-\alpha) z_t k_t^{\alpha} \ell_t^{-\alpha}
+\end{equation}
+
+Simplifying:
+\begin{equation}
+\chi \ell_t^{1/\nu} = (1-\alpha) z_t k_t^{\alpha} \ell_t^{-\alpha} \frac{1}{c_t}
+\end{equation}
+
+Rearranging:
+\begin{equation}
+\chi \ell_t^{1/\nu + \alpha} = (1-\alpha) z_t k_t^{\alpha} \frac{1}{c_t}
+\end{equation}
+
+Solving for labor:
+\begin{equation}
+\ell_t = \left[ \frac{(1-\alpha) z_t k_t^{\alpha}}{\chi c_t} \right]^{\nu/(1 + \alpha\nu)}
+\end{equation}
+
+\subsection{Resource Constraint}
+
+The resource constraint is:
+\begin{equation}
+k_{t+1} = (1-\delta) k_t + z_t k_t^{\alpha} \ell_t^{1-\alpha} - c_t
+\end{equation}
+
+\subsection{Complete Set of Equilibrium Conditions}
+
+The competitive equilibrium of the stochastic neoclassical growth model with labor is characterized by the following system of equations:
+
+\textbf{1. Euler Equation (Intertemporal Optimality):}
+\begin{equation}
+\frac{1}{c_t} = \beta E_t \left[ \frac{1}{c_{t+1}} \left( \alpha z_{t+1} k_{t+1}^{\alpha-1} \ell_{t+1}^{1-\alpha} + (1-\delta) \right) \right]
+\label{eq:euler}
+\end{equation}
+
+\textbf{2. Intratemporal FOC (Labor-Leisure Choice):}
+\begin{equation}
+\chi \ell_t^{1/\nu} = (1-\alpha) z_t k_t^{\alpha} \ell_t^{-\alpha} \frac{1}{c_t}
+\label{eq:intratemporal}
+\end{equation}
+
+which can be solved explicitly for labor:
+\begin{equation}
+\ell_t = \left[ \frac{(1-\alpha) z_t k_t^{\alpha}}{\chi c_t} \right]^{\nu/(1 + \alpha\nu)}
+\label{eq:labor_supply}
+\end{equation}
+
+subject to the constraint:
+\begin{equation}
+0 \leq \ell_t \leq 1
+\label{eq:labor_constraint}
+\end{equation}
+
+\textbf{3. Resource Constraint:}
+\begin{equation}
+k_{t+1} = (1-\delta) k_t + z_t k_t^{\alpha} \ell_t^{1-\alpha} - c_t
+\label{eq:resource}
+\end{equation}
+
+\textbf{4. Productivity Process:}
+\begin{equation}
+\log(z_{t+1}) = \rho \log(z_t) + \varepsilon_{t+1}, \quad \varepsilon_{t+1} \sim N(0, \sigma^2)
+\label{eq:productivity}
+\end{equation}
+
+\textbf{5. Return on Capital:}
+\begin{equation}
+R_{t+1} = \alpha z_{t+1} k_{t+1}^{\alpha-1} \ell_{t+1}^{1-\alpha} + (1-\delta)
+\label{eq:return}
+\end{equation}
+
+\textbf{6. Wage Rate:}
+\begin{equation}
+w_t = (1-\alpha) z_t k_t^{\alpha} \ell_t^{-\alpha}
+\label{eq:wage}
+\end{equation}
+
+The equilibrium is solved by finding policy functions $c(k_t, z_t)$ and $\ell(k_t, z_t)$ that satisfy equations (\ref{eq:euler})--(\ref{eq:resource}) for all $(k_t, z_t)$ in the state space. The policy functions are approximated using Chebyshev polynomials, and the system is solved via fixed-point iteration as described in Algorithm \ref{alg:fixed_point}.
+
+\subsection{Steady State}
+
+In steady state with $z_{ss} = 1$:
+\begin{align}
+k_{ss} &= \left( \frac{\beta \alpha}{1 - \beta(1-\delta)} \right)^{1/(1-\alpha)} \\
+\ell_{ss} &: \text{solved from intratemporal FOC} \\
+c_{ss} &= k_{ss}^{\alpha} \ell_{ss}^{1-\alpha} - \delta k_{ss}
+\end{align}
+
+\section{Chebyshev Polynomial Approximation}
+
+\subsection{Chebyshev Polynomials}
+
+\begin{definition}[Chebyshev Polynomials of the First Kind]
+Chebyshev polynomials of the first kind are defined recursively:
+\begin{align}
+T_0(x) &= 1 \\
+T_1(x) &= x \\
+T_n(x) &= 2x T_{n-1}(x) - T_{n-2}(x), \quad n \geq 2
+\end{align}
+
+for $x \in [-1, 1]$. These polynomials form an orthogonal basis on $[-1,1]$ with respect to the weight function $w(x) = 1/\sqrt{1-x^2}$.
+\end{definition}
+
+\subsection{Chebyshev Nodes}
+
+\begin{proposition}[Optimality of Chebyshev Nodes]
+The Chebyshev nodes (extrema of Chebyshev polynomials) are:
+\begin{equation}
+x_i = \cos\left( \frac{(2i-1)\pi}{2n} \right), \quad i = 1, 2, \ldots, n
+\end{equation}
+
+These nodes are optimal for polynomial interpolation in the sense of minimizing the maximum interpolation error (minimax property). They cluster near the boundaries of the interval, providing better approximation quality compared to equally-spaced nodes.
+\end{proposition}
+
+\subsection{Approximation of Policy Functions}
+
+We approximate the consumption policy function $c(k, z)$ using a tensor product of Chebyshev polynomials:
+\begin{equation}
+c(k, z) \approx \sum_{i=0}^{n_k-1} \sum_{j=0}^{n_z-1} \gamma_{ij} T_i(\tilde{k}) T_j(\tilde{z})
+\end{equation}
+
+where:
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+\item $\tilde{k} = \frac{2k - (k_{high} + k_{low})}{k_{high} - k_{low}}$ maps $k \in [k_{low}, k_{high}]$ to $[-1, 1]$
+\item $\tilde{z} = \frac{2\log(z) - (\log(z_{high}) + \log(z_{low}))}{\log(z_{high}) - \log(z_{low})}$ maps $\log(z)$ to $[-1, 1]$
+\item $\gamma_{ij}$ are the Chebyshev coefficients
+\item $n_k$ and $n_z$ are the number of Chebyshev nodes for capital and productivity
+\end{itemize}
+
+\subsection{Domain Selection}
+
+The capital domain is centered around steady state:
+\begin{equation}
+k_{low} = 0.5 \cdot k_{ss}, \quad k_{high} = 1.5 \cdot k_{ss}
+\end{equation}
+
+The productivity domain covers $\pm 3$ standard deviations:
+\begin{align}
+\log(z_{low}) &= -3 \sqrt{\frac{\sigma^2}{1-\rho^2}} \\
+\log(z_{high}) &= 3 \sqrt{\frac{\sigma^2}{1-\rho^2}}
+\end{align}
+
+\section{Numerical Solution Method}
+
+\subsection{Gauss-Hermite Quadrature}
+
+To compute expectations over productivity shocks, we use Gauss-Hermite quadrature:
+\begin{equation}
+E[f(\varepsilon)] = \int_{-\infty}^{\infty} f(\varepsilon) \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{\varepsilon^2}{2\sigma^2}\right) d\varepsilon
+\end{equation}
+
+Using the change of variable $u = \varepsilon/(\sqrt{2}\sigma)$:
+\begin{equation}
+E[f(\varepsilon)] = \frac{1}{\sqrt{\pi}} \int_{-\infty}^{\infty} f(\sqrt{2}\sigma u) \exp(-u^2) du
+\end{equation}
+
+Gauss-Hermite quadrature approximates this as:
+\begin{equation}
+E[f(\varepsilon)] \approx \frac{1}{\sqrt{\pi}} \sum_{i=1}^{n_q} w_i f(\sqrt{2}\sigma u_i)
+\end{equation}
+
+where $(u_i, w_i)$ are the Gauss-Hermite nodes and weights.
+
+\subsection{Fixed-Point Iteration Algorithm}
+
+\newpage
+\begin{algorithmbox}[title=Fixed-Point Iteration Algorithm for Consumption Policy Function]
+\label{alg:fixed_point}
+
+\textbf{Input:} Model parameters: $\beta, \alpha, \delta, \chi, \nu, \rho, \sigma$; Chebyshev collocation nodes: $(k_i, z_j)$ for $i=1,\ldots,n_k$, $j=1,\ldots,n_z$; Convergence tolerance: $\text{tol} > 0$; Maximum iterations: $\text{max\_iter} \in \mathbb{N}$; Damping parameter: $\lambda \in (0,1]$
+
+\textbf{Output:} Chebyshev coefficients $\gamma_{ij}$ defining the consumption policy function $c(k,z)$
+
+\vspace{0.1cm}
+\begin{pseudocode}
+\pseudoline{1} \pseudocomment{// Initialization}\\
+\pseudoline{2} $c^{(0)}(k_i, z_j) \leftarrow c_{ss}$ $\forall (k_i, z_j)$; $\gamma^{(0)} \leftarrow \mathbf{0}$; $iter \leftarrow 0$\\
+\pseudoline{3} \pseudokw{while} $iter < \text{max\_iter}$ \pseudokw{do}\\
+\pseudoline{4} \quad $iter \leftarrow iter + 1$\\
+\pseudoline{5} \quad \pseudokw{for} $i = 1$ \pseudokw{to} $n_k$ \pseudokw{do}\\
+\pseudoline{6} \quad \quad \pseudokw{for} $j = 1$ \pseudokw{to} $n_z$ \pseudokw{do}\\
+\pseudoline{7} \quad \quad \quad $c_{ij}^{(iter-1)} \leftarrow c^{(iter-1)}(k_i, z_j)$\\
+\pseudoline{8} \quad \quad \quad $\ell_{ij}^{\text{unc}} \leftarrow \left[ \frac{(1-\alpha) z_j k_i^{\alpha}}{\chi c_{ij}^{(iter-1)}} \right]^{\nu/(1 + \alpha\nu)}$; $\ell_{ij} \leftarrow \min(\max(\ell_{ij}^{\text{unc}}, 0), 1)$\\
+\pseudoline{9} \quad \quad \quad $k'_{ij} \leftarrow (1-\delta) k_i + z_j k_i^{\alpha} \ell_{ij}^{1-\alpha} - c_{ij}^{(iter-1)}$\\
+\pseudoline{10} \quad \quad \quad $E_{ij} \leftarrow 0$\\
+\pseudoline{11} \quad \quad \quad \pseudokw{for} $q = 1$ \pseudokw{to} $n_q$ \pseudokw{do}\\
+\pseudoline{12} \quad \quad \quad \quad $\log(z'_{qj}) \leftarrow \rho \log(z_j) + \sqrt{2}\sigma u_q$; $z'_{qj} \leftarrow \exp(\log(z'_{qj}))$\\
+\pseudoline{13} \quad \quad \quad \quad $c'_{qj} \leftarrow c^{(iter-1)}(k'_{ij}, z'_{qj})$\\
+\pseudoline{14} \quad \quad \quad \quad $\ell_{qj}' \leftarrow \left[ \frac{(1-\alpha) z'_{qj} (k'_{ij})^{\alpha}}{\chi c'_{qj}} \right]^{\nu/(1 + \alpha\nu)}$; $\ell_{qj}' \leftarrow \min(\max(\ell_{qj}', 0), 1)$\\
+\pseudoline{15} \quad \quad \quad \quad $R'_{qj} \leftarrow \alpha z'_{qj} (k'_{ij})^{\alpha-1} (\ell_{qj}')^{1-\alpha} + (1-\delta)$\\
+\pseudoline{16} \quad \quad \quad \quad $E_{ij} \leftarrow E_{ij} + \beta \frac{w_q}{\sqrt{\pi}} \frac{R'_{qj}}{c'_{qj}}$\\
+\pseudoline{17} \quad \quad \quad \pseudokw{end for}\\
+\pseudoline{18} \quad \quad \quad $c_{ij}^{\text{new}} \leftarrow 1/E_{ij}$; $c_{ij}^{(iter)} \leftarrow (1-\lambda) c_{ij}^{(iter-1)} + \lambda c_{ij}^{\text{new}}$\\
+\pseudoline{19} \quad \quad \quad $e_{ij} \leftarrow E_{ij} - 1/c_{ij}^{(iter-1)}$\\
+\pseudoline{20} \quad \quad \pseudokw{end for}\\
+\pseudoline{21} \quad \pseudokw{end for}\\
+\pseudoline{22} \quad $\boldsymbol{\gamma}^{(iter)} \leftarrow \mathbf{T}^{-1} \mathbf{c}^{(iter)}$\\
+\pseudoline{23} \quad $\text{max\_error} \leftarrow \max_{i,j} |e_{ij}|$\\
+\pseudoline{24} \quad \pseudokw{if} $\text{max\_error} < \text{tol}$ \pseudokw{then} \pseudokw{return} $\boldsymbol{\gamma}^{(iter)}$\\
+\pseudoline{25} \pseudokw{end while}\\
+\pseudoline{26} \pseudokw{return} $\boldsymbol{\gamma}^{(iter)}$
+\end{pseudocode}
+\end{algorithmbox}
+\newpage
+
+\subsection{Inversion Step}
+
+Given consumption values $c(k_i, z_j)$ at collocation points, we solve for coefficients $\gamma_{ij}$ such that:
+\begin{equation}
+c(k_i, z_j) = \sum_{i'=0}^{n_k-1} \sum_{j'=0}^{n_z-1} \gamma_{i'j'} T_{i'}(\tilde{k}_i) T_{j'}(\tilde{z}_j)
+\end{equation}
+
+This is a linear system:
+\begin{equation}
+\mathbf{c} = \mathbf{T} \boldsymbol{\gamma}
+\end{equation}
+
+where:
+\begin{itemize}[leftmargin=*, itemsep=0.1em]
+\item $\mathbf{c}$ is the vector of consumption values (length $n_k \times n_z$)
+\item $\mathbf{T}$ is the matrix of Chebyshev polynomials evaluated at collocation points
+\item $\boldsymbol{\gamma}$ is the vector of coefficients (length $n_k \times n_z$)
+\end{itemize}
+
+The solution is:
+\begin{equation}
+\boldsymbol{\gamma} = \mathbf{T}^{-1} \mathbf{c}
+\end{equation}
+
+The matrix $\mathbf{T}$ is well-conditioned when using Chebyshev nodes, ensuring numerical stability.
+
+\subsection{Convergence Criterion}
+
+The algorithm converges when:
+\begin{equation}
+\max_{i,j} |e_{ij}| < \text{tol}
+\end{equation}
+
+where $e_{ij}$ is the Euler error at collocation point $(k_i, z_j)$:
+\begin{equation}
+e_{ij} = \beta E_t \left[ \frac{1}{c(k'_{ij}, z'_{ij})} R'_{ij} \right] - \frac{1}{c(k_i, z_j)}
+\end{equation}
+
+\section{Implementation Details}
+
+\subsection{Labor Constraint}
+
+Labor is constrained to $[0, 1]$. When computing labor from the intratemporal FOC:
+\begin{equation}
+\ell_{\text{unconstrained}} = \left[ \frac{(1-\alpha) z k^{\alpha}}{\chi c} \right]^{\nu/(1 + \alpha\nu)}
+\end{equation}
+
+we apply the constraint:
+\begin{equation}
+\ell = \min(\max(\ell_{\text{unconstrained}}, 0), 1)
+\end{equation}
+
+\subsection{Damping}
+
+To improve convergence, we use dampening:
+\begin{equation}
+c^{(iter)} = (1-\lambda) c^{(iter-1)} + \lambda c^{(iter)}_{\text{new}}
+\end{equation}
+
+where $\lambda \in (0, 1]$ is the dampening parameter.
+
+\subsection{Error Metrics}
+
+We track two error metrics:
+\begin{align}
+\text{Euler error} &= \beta E_t \left[ \frac{1}{c'} R' \right] - \frac{1}{c} \\
+\text{Intratemporal error} &= \chi \ell^{1/\nu} - \frac{(1-\alpha) z k^{\alpha} \ell^{-\alpha}}{c}
+\end{align}
+
+\section{Model Parameters}
+
+Typical parameter values used in the numerical solution:
+\begin{align}
+\beta &= 0.99 \quad \text{(discount factor)} \\
+\alpha &= 0.33 \quad \text{(capital share)} \\
+\delta &= 0.025 \quad \text{(depreciation rate)} \\
+\chi &= 8.042775 \quad \text{(labor disutility)} \\
+\nu &= 1.0 \quad \text{(Frisch elasticity)} \\
+\rho &= 0.95 \quad \text{(productivity persistence)} \\
+\sigma &= 0.007 \quad \text{(productivity shock std. dev.)} \\
+n_k &= 10 \quad \text{(Chebyshev nodes for capital)} \\
+n_z &= 10 \quad \text{(Chebyshev nodes for productivity)} \\
+n_q &= 5 \quad \text{(Gauss-Hermite quadrature nodes)}
+\end{align}
+
+
+\end{document}
+

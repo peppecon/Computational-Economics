@@ -1,0 +1,55 @@
+\frametitle{Neoclassical Growth Model: Python Implementation}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.optimize import minimize
+from functions_library import *
+
+# Step 1: Approximate consumption function
+n_z, n_k = 10, 10
+p_z, p_k = 10, 10
+kron_zk, cheb_nodes_z, cheb_nodes_k = Tenser_Product_bv(n_z, n_k, p_z, p_k)
+z_grid = Change_Variable_Fromcheb(z_min, z_max, cheb_nodes_z)
+k_grid = Change_Variable_Fromcheb(k_min, k_max, cheb_nodes_k)
+
+# Step 2: Define approximating function
+def Approximating_Function(gamma, kron_zk):
+    approx_func = gamma @ kron_zk
+    return np.exp(approx_func + np.log(c_ss))  # Transform back
+
+# Step 3: Compute other functions
+def labor_policy(c, z, k):
+    return ((1/(chi*c)) * (1-alpha) * np.exp(z) * k**alpha)**(nu/(1+alpha*nu))
+
+def output_policy(z, k, ell):
+    return np.exp(z) * k**alpha * ell**(1-alpha)
+
+def next_capital(y, c, k, delta):
+    return y - c + (1-delta)*k
+
+# Step 4: Euler residual function
+def Euler_Residual(gamma, z_grid, k_grid, kron_zk, n_q, q_nodes, q_weights):
+    # Compute consumption
+    c = Approximating_Function(gamma, kron_zk)
+    # Compute other functions
+    ell = labor_policy(c, z_grid, k_grid)
+    y = output_policy(z_grid, k_grid, ell)
+    k_prime = next_capital(y, c, k_grid, delta)
+    # Compute Euler residual using Gauss-Hermite quadrature
+    EE = 0
+    for i in range(n_q):
+        z_prime = rho_z * z_grid + sqrt(2) * sigma_z * q_nodes[i]
+        # Evaluate consumption at next period (interpolation needed)
+        c_prime = Approximating_Function(gamma, kron_zk_new)
+        ell_prime = labor_policy(c_prime, z_prime, k_prime)
+        y_prime = output_policy(z_prime, k_prime, ell_prime)
+        EE += q_weights[i] * beta * (c/c_prime) * (alpha*y_prime/k_prime + 1 - delta)
+    EE = EE / np.sqrt(np.pi) - 1
+    return np.sum(EE**2)
+
+# Step 5: Minimize
+gamma_0 = np.zeros(n_z * n_k)
+res = minimize(Euler_Residual, gamma_0, args=(...), method='BFGS')
+gamma_star = res.x
+\end{lstlisting}
+
