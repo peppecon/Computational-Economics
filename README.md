@@ -21,12 +21,11 @@ The following figures illustrate the core concepts of function approximation, de
 ### Chebyshev vs Taylor Polynomial: Exponential Function
 ![Chebyshev vs Taylor Exp](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/09a_chebyshev_vs_polynomial_exp.png)
 
-### Approximation of a Curvy Function
-Comparing the performance of global vs. local methods on functions with complex curvature.
+### Chebyshev Approximation: Curvy Function
+![Chebyshev Curvy](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/09b_chebyshev_vs_polynomial_curvy.png)
 
-| Chebyshev Approximation: Curvy Function | Taylor Polynomial Approximation: Curvy Function |
-| :---: | :---: |
-| ![Chebyshev Curvy](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/09b_chebyshev_vs_polynomial_curvy.png) | ![Taylor Curvy](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/13_taylor_expansions_only.png) |
+### Taylor Polynomial Approximation: Curvy Function
+![Taylor Curvy](Projection%20Methods%20with%20NGM%20Application/presentation/figures/teaching/13_taylor_expansions_only.png)
 
 ---
 
