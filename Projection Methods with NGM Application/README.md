@@ -48,7 +48,7 @@ The model is calibrated using standard quarterly parameters:
 ![Deterministic Comparison](./solve_NGM_model/NGM_figures/deterministic_Chebyshev_direct_comparison.png)
 
 ### Stochastic NGM with Endogenous Labor Supply
-###The stochastic implementation solves for consumption and labor supply policies across the (k, z) state space.
+The stochastic implementation solves for consumption and labor supply policies across the (k, z) state space.
 
 #### Policy Functions & Results
 The stochastic solution provides the policy functions for c(k,z) and l(k,z).
