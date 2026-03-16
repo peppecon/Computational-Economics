@@ -52,7 +52,7 @@ The model is calibrated using standard quarterly parameters:
 #### Policy Functions & Results
 The stochastic solution provides the policy functions for $c(k,z)$ and $l(k,z)$.
 
-![3D Policy Functions](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation.png)
+![2D Policy Functions](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/presentation/stochastic_Chebyshev_labor_presentation_2d.png)
 
 ![Policy Functions Z1](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_policy_functions_z1.png)
 
