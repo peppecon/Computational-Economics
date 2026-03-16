@@ -56,16 +56,14 @@ The stochastic solution provides the policy functions for $c(k,z)$ and $l(k,z)$.
 
 ![Policy Functions Z1](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_policy_functions_z1.png)
 
-#### Accuracy & Convergence Analysis
-We verify the solution using Euler equation residuals and observe the convergence as the polynomial degree increases.
+#### Euler Equation Errors: Convergence and Accuracy
+Measurement of numerical precision as a function of the polynomial degree ($n$). As $n$ increases, the Euler residuals vanish, demonstrating high global accuracy.
 
-![Euler Errors 3D Combined](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_combined.png)
-
-![Convergence Study](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_convergence_study.png)
-
-| High Order Accuracy ($n=20$) | Lower Order Accuracy ($n=5$) |
+| Degree $n=3$ | Degree $n=5$ |
 | :---: | :---: |
-| ![Euler Error n20](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n20.png) | ![Euler Error n5](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n5.png) |
+| ![Euler n3](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n3.png) | ![Euler n5](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n5.png) |
+| **Degree $n=10$** | **Degree $n=20$** |
+| ![Euler n10](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n10.png) | ![Euler n20](Projection%20Methods%20with%20NGM%20Application/solve_NGM_model/NGM_figures/stochastic/stochastic_labor_euler_errors_3d_n20.png) |
 
 ---
 
